@@ -7,9 +7,22 @@ contract MyContract {
     mapping(address => uint256) public balances;
     address payable wallet;
     
+      //trigger event to allow people to know token has been purchased if they listen
+      //can listen to only events from certain buyers using _indexed
+      
+      event Purchase(
+          address indexed _buyer,
+          uint256 _amount
+          );
+    
     constructor(address payable _wallet) public {
         wallet = _wallet;
     }
+    //external can only be called outside. fallback function
+    function () external payable {
+        buyToken();
+    }
+    
     //payable modfiier allows user to pay
     function buyToken() public payable {
         //a token will be issued to the caller and eth will be sent to the wallet
@@ -18,7 +31,12 @@ contract MyContract {
         //msg.value tells us how many ETH is being sent
         wallet.transfer(msg.value);
         // start by tracking the person's balance
+        //trigger event
+        emit Purchase(msg.sender, 1);
+     
         
     }
 }
-//need to add a gas requirement to allow compiling
+
+//blockchain is async, app talks to smart contracts, you might call a function and want to wait for the event to be emitted, subscribe to event and filter for only ones applicable
+//reload the app state when event is triggered. or get event stream from smart contract
