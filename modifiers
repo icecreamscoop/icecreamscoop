@@ -1,0 +1,96 @@
+pragma solidity ^0.5.1;
+
+//public or private
+contract MyContract {
+ uint256 public peopleCount = 0;
+mapping(uint=> Person) public people;
+
+//keep track of owner
+//address is a datatype in solidity
+address owner;
+
+modifier onlyOwner(){
+    //only Owner can call the function, msg represents metadata
+    //compares against owner via equality and if not throw an error. require force it to be true
+    require(msg.sender == owner);
+    _;
+    
+}
+ 
+ struct Person {
+     uint _id;
+     string _firstName;
+     string _lastName;
+ }
+ //follows example 1
+ constructor() public {
+     
+ }
+ 
+ //address can be in constructor
+ // formatting, function name then separate arguments into next lines
+function addPerson(
+    tring memory _firstName, 
+    tring memory _lastName
+    )
+    
+//example 1 if we're pointing to only owner
+    public
+    onlyOwner
+    
+  {
+    incrementCount();
+    people[peopleCount] = Person(peopleCount, _firstName, _lastName);
+
+}
+//modifier, external callers cant use it
+    function incrementCount() internal {
+        peopleCount += 1;
+    }
+}
+// want to add a custom modifier so only certain people can call the modefier e.g. admin
+
+
+    
+//example 2 if we want the contract to be only open for specific amount of time or a time that has happened. useful for crowdsale
+//if they make a contribution before, it will throw an error.
+
+pragma solidity ^0.5.1;
+
+contract MyContract {
+uint256 public peopleCount = 0;
+mapping(uint=> Person) public people;
+//need to set opening time, timing is expressed in seconds, epoch time
+uint256 openingTime = 1544669573;
+//compare to now, find the current block timestamp
+require(block.timestamp >= openingTime);
+_;
+    
+}
+ 
+ struct Person {
+     uint _id;
+     string _firstName;
+     string _lastName;
+ }
+ constructor() public {
+     
+ }
+ 
+function addPerson(
+    tring memory _firstName, 
+    tring memory _lastName
+    )
+    
+    public
+    onlyWhileOpen
+    
+  {
+    incrementCount();
+    people[peopleCount] = Person(peopleCount, _firstName, _lastName);
+
+}
+//modifier, external callers cant use it
+    function incrementCount() internal {
+        peopleCount += 1;
+    }
