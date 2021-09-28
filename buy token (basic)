@@ -1,0 +1,23 @@
+pragma solidity ^0.5.1;
+//how to accept ETH
+
+contract MyContract {
+    
+    //mapping is an array,  address is key and value is unsigned integrer, public let us read the values
+    mapping(address => uint256) public balances;
+    address payable wallet;
+    
+    constructor(address payable _wallet) public {
+        wallet = _wallet;
+    }
+    //payable modfiier allows user to pay
+    function buyToken() public payable {
+        //a token will be issued to the caller and eth will be sent to the wallet
+        //whenever you call the function you are buying 1 token
+        balances[msg.sender] += 1;
+        //msg.value tells us how many ETH is being sent
+        wallet.transfer(msg.value);
+        // start by tracking the person's balance
+        
+    }
+}
