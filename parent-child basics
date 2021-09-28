@@ -1,0 +1,77 @@
+pragma solidity ^0.5.1;
+//token erc20 sample project
+//two contracts call one another
+// to deploy token, it needs a token address
+
+//Step 1:know the address that is deployed, reference the buy contract with the address, call the mint function after
+//look at who is calling the function. if msg.sender called it, then there will be no increase
+//tx.origin will mint function for whoever initiated the transaction
+
+contract ERC20Token {
+    string public name;
+    
+    mapping(address => uint256) public balances;
+    
+    function mint() public {
+        balances[tx.origin] ++;
+    }
+    
+}
+
+//buy needs to reference where to buy from and call mint function
+//when deployed refer to ERC20Token contract for contract address and deploy that address 1hr 7 Mins bookmark
+
+contract MyContract {
+    address payable wallet;
+    
+    constructor(address payable _wallet, address _token) public {
+        wallet = _wallet;
+        token = _token;
+    }
+    function() external payable {
+        buyToken();
+    }
+    
+    function buyToken() public payable {
+        
+    //will refer to the deployed token, then it will call the mint function
+       ERC20Token(address(token)).mint();
+        //mint
+        _token.mint();
+        wallet.transfer(msg.value);
+    }
+}
+//need to declare identified
+
+
+//parent-child relationship
+contract ERC20Token {
+    string public name;
+    
+    mapping(address => uint256) public balances;
+    
+    constructor(string memory _name) public {
+        name = _name;
+    }
+    
+    function mint() public {
+        balances[tx.origin] ++;
+    }
+    
+}
+//is defins the parent-child relationship
+
+contract MyToken is ERC20Token {
+    string public symbol;
+    address[] public owners;
+    uint256 ownerCount;
+constructor(string memory _name, string memory _symbol) ERC20Token (_name) public {
+    symbol = _symbol;
+}
+function mint() public {
+    super.mint();
+    ownerCount ++;
+    owners.push(msg.sender);
+}
+   
+}
