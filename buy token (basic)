@@ -21,3 +21,4 @@ contract MyContract {
         
     }
 }
+//need to add a gas requirement to allow compiling
