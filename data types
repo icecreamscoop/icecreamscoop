@@ -1,0 +1,48 @@
+pragma solidity ^0.5.1;
+//int and unit difference is that int can be signed (negative) uint has to be positve
+
+contract MyContract {
+ //public means the data can be read
+ //person is a data type. it is an array
+ // it is storing people
+ 
+ //there's an array of unknown size when its Person[] so we need to ref by ID
+ Person[] public people;
+ 
+ uint256 public peopleCount;
+ 
+ struct Person {
+     string _firstName;
+     string _lastName;
+ }
+ 
+function addPerson(string memory _firstName, string memory _lastName) public {
+    //push adds new things into array
+  
+    people.push(Person(_firstName, _lastName));
+      peopleCount +=1;
+}
+}
+
+//mapping
+contract MyContract {
+ uint256 public peopleCount = 0
+ //uint is the key and Person is a record and it is public
+//need to keep track. any key without a value will give an empty struct =0 so use the count to know which one is it
+//if want to know all then create a loop to read out one by one
+Mapping(unint => Person) public people;
+ 
+ struct Person {
+     uint _id;
+     string _firstName;
+     string _lastName;
+ }
+ 
+function addPerson(string memory _firstName, string memory _lastName) public {
+    //push adds new things into array
+    peopleCount +=1;
+    people[peopleCount] = Person(peopleCount, _firstName, _lastName);
+    people.push(Person(_firstName, _lastName));
+
+}
+}
