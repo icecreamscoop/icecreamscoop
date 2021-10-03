@@ -1,0 +1,39 @@
+pragma solidity ^0.8.0;
+//save money and cant withdraw until a specific date
+//this can be applied to vesting contracts
+
+contract Timelock {
+    //require who can withdraw?
+    //how much can they withdraw?
+    //when can they withdraw
+    
+    //state variables are things that stored on the blockchain
+    //address is an identifier
+    //time is expressed as unix timestampts -> refer to unixtimestamp.com
+    //adding payable because beneficiary needs to be able to receive the funds
+    
+    address payable public beneficiary;
+    uint256 public releaseTime;
+    
+    constructor(
+        address payable _beneficiary,
+        uint256 _releaseTime
+    ) 
+        public 
+        payable
+    {
+        require(_releaseTime > block.timestamp);
+        beneficiary = _beneficiary;
+        releaseTime = _releaseTime;
+    }
+    
+    function release() public {
+        
+          require(block.timestamp >= releaseTime);
+        
+        //call transfer function to send ETH to _beneficiary
+        //determine amount to send by determining how much the smart contract holds
+        //got an error transfer address needs to be payable
+        address(beneficiary).transfer(address(this).balance);
+    }
+}
