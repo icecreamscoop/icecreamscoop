@@ -1,0 +1,40 @@
+//escrow: each person get asset for fulfilling conditions
+pragma solidity ^0.8.0;
+
+contract Escrow {
+    
+    //agent address is stored on the blockchain
+    address agent;
+    
+    mapping(address => uint256) public deposits;
+    
+    //comparing address of deployer address with the escrow agent's address so that only msg.sender is the only one who can trigger withdraw funds
+    //require will throw exception to evaluate to true
+    modifier onlyAgent() {
+        require(msg.sender == agent);
+        _;
+    }
+    
+    //whitelisted addresses only
+    
+    constructor () public {
+        //msg.sender is the address that deployed the smart contract
+        agent = msg.sender;
+    }
+    //amount can be stored as state variable with uint256 amount
+    //deposit funds into escrow account
+    
+    function deposit(address payee) public onlyAgent payable {
+        uint256 amount = msg.value;
+        deposits[payee] = deposits[payee] + amount;
+    }
+    
+    //withdraw money
+    function withdraw(address payable payee) public onlyAgent {
+        uint256 payment = deposits[payee];
+        
+        //we want to send everything
+        deposits[payee] = 0;
+        payee.transfer(payment);
+    }
+}
